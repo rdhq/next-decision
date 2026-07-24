@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next Decision — Plataforma de Desenvolvimento Tático no Futebol</title>
+  <meta name="description" content="Democratizando a inteligência tática no futebol.">
+  <link rel="icon" type="image/png" href="img/IMG_5812.PNG">
+
+  <!-- Google Fonts Preconnect & Imports -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Montserrat', 'system-ui', 'sans-serif'],
+            display: ['Montserrat', 'serif'],
+          },
+          colors: {
+            // Adapted Design System Tokens for Next Decision (Navy, Azul, Branco, Cinza Claro)
+            bg: '#FAFBFD', // Cinza Claro base
+            surface: '#FFFFFF', // Branco
+            primary: {
+              DEFAULT: '#0B132B', // Navy
+              foreground: '#F8FAFC',
+            },
+            secondary: {
+              DEFAULT: '#2563EB', // Azul
+              soft: '#DBEAFE',
+              glow: '#60A5FA',
+            },
+            accent: {
+              DEFAULT: '#3B82F6', // Azul claro/bright
+              soft: '#EEF2FF',
+            },
+            neutral: {
+              50: '#F8FAFC',
+              100: '#F1F5F9',
+              200: '#E2E8F0',
+              300: '#CBD5E1',
+              400: '#94A3B8',
+              500: '#64748B',
+              600: '#475569',
+              700: '#334155',
+              800: '#1E293B',
+              900: '#0F172A',
+              950: '#020617',
+            },
+          },
+          boxShadow: {
+            'card': '0px 0px 0px 1px rgba(0,0,0,0.04), 0px 8px 12px -4px rgba(11,19,43,0.08), 0px 1px 2px 0px rgba(11,19,43,0.10)',
+            'pill': '0px 6px 6px -3px rgba(0,0,0,0.08), 0px 3px 3px -1.5px rgba(0,0,0,0.08), 0px 0px 0px 1px rgba(255,255,255,0.4) inset',
+            'glow': '0 0 25px -5px rgba(37,99,235,0.3)',
+            'glow-accent': '0 0 35px -5px rgba(59,130,246,0.35)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM CORE CSS TOKENS & KEYFRAMES
+       ============================================================ */
+    :root {
+      --background: oklch(98.46% .002 247.84);
+      --foreground: oklch(.145 0 0);
+      --card: #ffffff;
+      --card-foreground: oklch(.145 0 0);
+      --primary: oklch(.205 0 0); /* Mapped to Navy concept conceptually, tailwind class is used though */
+      
+      --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
+      --font-display: 'Montserrat', Georgia, serif;
+
+      --ease-out: cubic-bezier(0, 0, 0.2, 1);
+      --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--background);
+      color: var(--foreground);
+      overflow-x: hidden;
+    }
+
+    /* Grid de Fundo Animado */
+    .bg-grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(11, 19, 43, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(11, 19, 43, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .bg-dots-pattern {
+      background-image: radial-gradient(rgba(11, 19, 43, 0.08) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* Efeitos de Typography & Lettering Transparente */
+    .text-gradient-primary {
+      background: linear-gradient(135deg, #0B132B 0%, #1C2541 50%, #2563EB 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .text-gradient-accent {
+      background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .text-stroke {
+      -webkit-text-stroke: 1.5px rgba(11, 19, 43, 0.8);
+      color: transparent;
+    }
+
+    .text-stroke-sm {
+      -webkit-text-stroke: 1px rgba(37, 99, 235, 0.6);
+      color: transparent;
+    }
+
+    /* Keyframes de Animação */
+    @keyframes orbit {
+      0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.08); }
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes shineSweep {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    .animate-orbit { animation: orbit 22s linear infinite; }
+    .animate-float { animation: floatSlow 6s ease-in-out infinite; }
+    .animate-pulse-glow { animation: pulseGlow 4s ease-in-out infinite; }
+    .animate-marquee { display: flex; width: 200%; animation: marquee 25s linear infinite; }
+    .animate-marquee:hover { animation-play-state: paused; }
+
+    /* Button & Glassmorphism Utilities */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 4px 20px -2px rgba(11, 19, 43, 0.05);
+    }
+
+    .glass-card-hover {
+      transition: all 0.3s var(--ease-out);
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px -4px rgba(37, 99, 235, 0.12), 0 0 0 1px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-shine {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-shine::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform: skewX(-20deg);
+      transition: none;
+    }
+    .btn-shine:hover::after {
+      animation: shineSweep 1.2s ease-in-out;
+    }
+
+    /* Animations on Scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--ease-out), padding 0.3s ease;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen text-neutral-900 bg-bg antialiased selection:bg-secondary-soft selection:text-primary">
+
+  <!-- ============================================================
+       STICKY NAVBAR
+       ============================================================ -->
+  <header class="sticky top-0 z-50 w-full border-b border-neutral-200/80 bg-surface/80 backdrop-blur-md transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="relative w-11 h-11 rounded-xl overflow-hidden bg-primary flex items-center justify-center p-1 border border-neutral-200 shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
+          <img src="img/IMG_5812.PNG" alt="Next Decision Logo" class="w-full h-full object-contain">
+        </div>
+        <div>
+          <span class="text-xl font-black tracking-tight text-gradient-primary font-display">NEXT DECISION</span>
+          <span class="block px-2 py-0.5 mt-0.5 text-[10px] font-bold tracking-wide uppercase bg-secondary-soft text-secondary rounded-full border border-neutral-200 w-fit">Desenvolvimento Tático</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-2 text-sm font-semibold text-neutral-600">
+        <a href="#problema" class="px-3 py-2 rounded-lg hover:text-primary hover:bg-neutral-100/80 transition-colors">O Problema</a>
+        <a href="#solucao" class="px-3 py-2 rounded-lg hover:text-primary hover:bg-neutral-100/80 transition-colors">A Solução</a>
+        <a href="#faixas-etarias" class="px-3 py-2 rounded-lg hover:text-primary hover:bg-neutral-100/80 transition-colors">Faixas Etárias</a>
+        <a href="#quem-somos" class="px-3 py-2 rounded-lg hover:text-primary hover:bg-neutral-100/80 transition-colors">Quem Somos</a>
+        <a href="#planos" class="px-3 py-2 rounded-lg hover:text-primary hover:bg-neutral-100/80 transition-colors">Planos</a>
+      </nav>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center gap-3">
+        <a href="#planos" class="btn-shine hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-primary rounded-full hover:bg-neutral-800 shadow-md shadow-primary/10 transition-all active:scale-95">
+          <span>GARANTIR VAGA</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-accent"></i>
+        </a>
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-primary hover:bg-neutral-100">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-b border-neutral-200 bg-surface/95 backdrop-blur-lg px-4 py-4 space-y-2">
+      <a href="#problema" onclick="toggleMobileMenu()" class="block px-4 py-2.5 text-sm font-semibold text-primary hover:bg-neutral-100 rounded-xl">O Problema</a>
+      <a href="#solucao" onclick="toggleMobileMenu()" class="block px-4 py-2.5 text-sm font-semibold text-primary hover:bg-neutral-100 rounded-xl">A Solução</a>
+      <a href="#planos" onclick="toggleMobileMenu()" class="block w-full text-center py-3 text-xs font-bold text-white bg-secondary rounded-xl shadow-md mt-2">
+        GARANTIR VAGA AGORA
+      </a>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HERO SHOWCASE
+       ============================================================ -->
+  <section id="hero" class="relative overflow-hidden pt-12 pb-24 lg:pt-32 lg:pb-40 border-b border-neutral-200">
+    <!-- Video Background -->
+    <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover -z-20">
+      <source src="mp4/hero_section.mp4" type="video/mp4">
+    </video>
+    <!-- Cinematic Dark Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-primary/95 via-primary/85 to-primary -z-10 mix-blend-multiply"></div>
+    
+    <!-- Premium Grid Pattern overlay -->
+    <div class="absolute inset-0 bg-grid-pattern opacity-10 -z-10"></div>
+
+    <!-- Glowing Orbs (Premium Depth) -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 -z-10 w-[1000px] h-[550px] bg-secondary/15 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute top-1/3 left-10 -z-10 w-96 h-96 bg-secondary/20 blur-[100px] rounded-full animate-pulse-glow pointer-events-none"></div>
+    <div class="absolute top-1/4 right-10 -z-10 w-96 h-96 bg-blue-500/10 blur-[100px] rounded-full animate-pulse-glow pointer-events-none" style="animation-delay: 2s;"></div>
+    <!-- Bottom fade to next section -->
+    <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-bg to-transparent z-0"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-10">
+      <div class="text-center max-w-4xl mx-auto flex flex-col items-center gap-8 reveal">
+        
+        <!-- Premium Dark Pill Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 shadow-[0_0_20px_rgba(37,99,235,0.2)] backdrop-blur-xl">
+          <span class="flex h-2 w-2 rounded-full bg-secondary shadow-[0_0_10px_#2563EB] animate-ping"></span>
+          <span class="text-[11px] font-black text-white tracking-widest uppercase">Futebol Moderno • Metodologia de Elite</span>
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-secondary"></i>
+        </div>
+
+        <!-- Main Title with Glowing Highlights -->
+        <h1 class="text-5xl sm:text-6xl lg:text-8xl font-black tracking-tighter text-white leading-[1.05] font-display">
+          O Talento Vence Jogos. <br class="hidden sm:inline"/>
+          A Inteligência <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-secondary drop-shadow-[0_0_15px_rgba(37,99,235,0.4)]">Define Carreiras.</span>
+        </h1>
+
+        <!-- Institutional Quote (Glassmorphism Dark) -->
+        <div class="relative max-w-3xl px-8 py-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-2xl mt-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+          <p class="text-lg sm:text-xl text-neutral-300 font-medium leading-relaxed">
+            O futebol moderno exige muito mais do que apenas físico e técnica. <strong class="text-white">A Next Decision ensina você a ler o jogo, antecipar jogadas e tomar decisões de elite.</strong>
+          </p>
+        </div>
+
+        <!-- Call to Action Buttons -->
+        <div class="flex items-center gap-5 flex-wrap justify-center mt-4">
+          <a href="#planos" class="group relative inline-flex items-center justify-center gap-3 px-10 py-4 font-bold text-white transition-all duration-300 ease-in-out hover:scale-105 active:scale-95">
+            <span class="absolute inset-0 rounded-full bg-gradient-to-r from-secondary to-blue-600 shadow-[0_0_30px_rgba(37,99,235,0.5)] group-hover:shadow-[0_0_40px_rgba(37,99,235,0.7)]"></span>
+            <span class="absolute inset-0 rounded-full bg-gradient-to-r from-secondary to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity blur-md"></span>
+            <div class="relative flex items-center gap-2">
+              <i data-lucide="zap" class="w-5 h-5 text-white animate-pulse"></i>
+              <span class="tracking-wide">⚡ QUERO PENSAR COMO UM PRO</span>
+            </div>
+          </a>
+          <button onclick="openVideoModal()" class="group inline-flex items-center gap-3 px-8 py-4 font-bold text-white bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95">
+            <i data-lucide="play-circle" class="w-6 h-6 text-secondary group-hover:scale-110 transition-transform"></i>
+            <span class="tracking-wide">Vídeo Institucional</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SEÇÃO 2: O PROBLEMA
+       ============================================================ -->
+  <section id="problema" class="py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary">A Realidade Atual</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-primary tracking-tight mt-2 font-display">
+          Treinar muito e jogar muito <br/> já <span class="text-gradient-primary">não é suficiente</span>.
+        </h2>
+        <p class="text-base text-neutral-600 mt-4 leading-relaxed font-medium">
+          Existe um grande vazio na formação do jovem atleta. O mercado oferece excesso de treino físico e técnico, mas quase nenhuma educação tática.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        
+        <div class="glass-card group p-8 rounded-[2rem] relative overflow-hidden reveal bg-white shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-neutral-200/60">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform duration-700"></div>
+          <div class="w-14 h-14 rounded-2xl bg-neutral-50 border border-neutral-200 shadow-sm text-primary flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+            <i data-lucide="dribble" class="w-7 h-7"></i>
+          </div>
+          <span class="text-[11px] font-black text-neutral-400 uppercase tracking-widest block mb-2">01 • O Básico</span>
+          <h3 class="text-2xl font-black text-primary mb-3 font-display">Técnica Sobrando, Visão Faltando</h3>
+          <p class="text-sm text-neutral-600 leading-relaxed">
+            Você domina o passe, o chute e o drible, mas nunca foi treinado para saber <strong>quando</strong> e <strong>onde</strong> usar cada recurso. A técnica sem decisão morre no campo.
+          </p>
+        </div>
+
+        <div class="glass-card group p-8 rounded-[2rem] relative overflow-hidden reveal bg-white shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-neutral-200/60" style="transition-delay: 0.1s;">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform duration-700"></div>
+          <div class="w-14 h-14 rounded-2xl bg-neutral-50 border border-neutral-200 shadow-sm text-primary flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+            <i data-lucide="activity" class="w-7 h-7"></i>
+          </div>
+          <span class="text-[11px] font-black text-neutral-400 uppercase tracking-widest block mb-2">02 • O Desgaste</span>
+          <h3 class="text-2xl font-black text-primary mb-3 font-display">Físico de Elite, Esforço Cego</h3>
+          <p class="text-sm text-neutral-600 leading-relaxed">
+            Correr 10km por jogo não adianta se você corre para os espaços errados. Sem leitura tática, seu esforço físico vira apenas cansaço desnecessário.
+          </p>
+        </div>
+
+        <div class="glass-card group p-8 rounded-[2rem] relative overflow-hidden border border-secondary shadow-[0_0_30px_rgba(37,99,235,0.15)] bg-gradient-to-br from-secondary-soft to-white reveal hover:-translate-y-2 hover:shadow-[0_0_40px_rgba(37,99,235,0.25)] transition-all duration-500" style="transition-delay: 0.2s;">
+          <div class="absolute top-4 right-4 px-3 py-1.5 text-[10px] font-black text-white bg-secondary rounded-full shadow-[0_4px_10px_rgba(37,99,235,0.4)] animate-pulse">
+            A LACUNA
+          </div>
+          <div class="w-14 h-14 rounded-2xl bg-secondary text-white flex items-center justify-center mb-8 shadow-[0_4px_15px_rgba(37,99,235,0.4)] group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300">
+            <i data-lucide="brain" class="w-7 h-7"></i>
+          </div>
+          <span class="text-[11px] font-black text-secondary uppercase tracking-widest block mb-2">03 • O Diferencial</span>
+          <h3 class="text-2xl font-black text-primary mb-3 font-display">A Mente Tática</h3>
+          <p class="text-sm text-neutral-600 leading-relaxed">
+            A base ensina a tocar na bola, mas quase ninguém ensina a entender o jogo. É a leitura espacial que separa o atleta comum do profissional.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SEÇÃO 3: A SOLUÇÃO & PILARES DE APRENDIZADO
+       ============================================================ -->
+  <section id="solucao" class="py-24 bg-bg border-t border-neutral-200 relative bg-dots-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 reveal">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-secondary">A Solução Next Decision</span>
+          <h2 class="text-3xl sm:text-5xl font-black text-primary tracking-tight mt-2 font-display">
+            Ensinamos Atletas a <span class="text-gradient-primary">Pensar o Jogo</span>
+          </h2>
+        </div>
+        <div class="max-w-md">
+          <p class="text-base text-neutral-600 font-medium">
+            Uma plataforma de desenvolvimento tático completa, que combina tecnologia, metodologia de elite e interação contínua.
+          </p>
+        </div>
+      </div>
+
+      <!-- 6 Pillars Bento Grid Premium -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[250px]">
+        
+        <!-- Card 1: Span 2 cols, Span 2 rows (Feature Hero) -->
+        <div class="glass-card group p-10 rounded-[2rem] reveal bg-gradient-to-br from-white to-neutral-50 md:col-span-2 md:row-span-2 relative overflow-hidden border border-neutral-200 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+          <div class="absolute -right-10 -top-10 w-64 h-64 bg-secondary/10 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all duration-700"></div>
+          <div class="w-16 h-16 rounded-2xl bg-secondary text-white flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-500">
+            <i data-lucide="video" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-3xl font-black text-primary mb-4 font-display">1. Biblioteca Tática</h3>
+          <p class="text-base text-neutral-600 leading-relaxed">
+            Aprenda a ler o jogo como os melhores. Aulas detalhadas em alta definição que explicam o "porquê" por trás de cada movimento tático e tomada de decisão.
+          </p>
+        </div>
+
+        <!-- Card 2: Span 2 cols, 1 row -->
+        <div class="glass-card group p-8 rounded-[2rem] reveal bg-white md:col-span-2 border border-neutral-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500" style="transition-delay: 0.1s;">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="text-2xl font-bold text-primary mb-2">2. Mentorias Ao Vivo</h3>
+              <p class="text-sm text-neutral-600 leading-relaxed pr-8">
+                Respostas diretas de quem entende. Encontros online para debater lances reais e ajustar sua percepção de jogo na hora.
+              </p>
+            </div>
+            <div class="w-14 h-14 rounded-2xl bg-secondary-soft text-secondary flex items-center justify-center shrink-0 border border-blue-200 group-hover:rotate-12 transition-transform duration-500">
+              <i data-lucide="users-round" class="w-7 h-7"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Span 1 col, 1 row -->
+        <div class="glass-card group p-8 rounded-[2rem] reveal bg-primary text-white md:col-span-1 border border-primary-light shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 overflow-hidden relative" style="transition-delay: 0.2s;">
+          <div class="absolute inset-0 bg-[url('img/IMG_5755.JPG.jpeg')] opacity-10 bg-cover bg-center mix-blend-overlay group-hover:scale-110 transition-transform duration-700"></div>
+          <div class="relative z-10 h-full flex flex-col justify-between">
+            <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center border border-white/20">
+              <i data-lucide="search" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-white mb-1">3. O Raio-X</h3>
+              <p class="text-xs text-neutral-300">Desmembramento tático de partidas clássicas.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Span 1 col, 1 row -->
+        <div class="glass-card group p-8 rounded-[2rem] reveal bg-white md:col-span-1 border border-neutral-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500" style="transition-delay: 0.3s;">
+          <div class="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center mb-4 group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
+            <i data-lucide="file-check-2" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-xl font-bold text-primary mb-1">4. Visão em Prática</h3>
+          <p class="text-xs text-neutral-600">Testes de decisão sob pressão do jogo.</p>
+        </div>
+
+        <!-- Card 5: Span 2 cols, 1 row -->
+        <div class="glass-card group p-8 rounded-[2rem] reveal bg-white md:col-span-2 border border-neutral-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500" style="transition-delay: 0.4s;">
+           <div class="flex items-center gap-6 h-full">
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-secondary flex items-center justify-center shrink-0 border border-blue-100 group-hover:scale-110 transition-transform duration-300">
+              <i data-lucide="crosshair" class="w-8 h-8"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-primary mb-2">5. O Dever da Sua Posição</h3>
+              <p class="text-sm text-neutral-600">
+                O que o mercado realmente exige de você? Orientação focada em mapas de calor e deveres específicos de cada setor.
+              </p>
+            </div>
+           </div>
+        </div>
+
+        <!-- Card 6: Span 2 cols, 1 row -->
+        <div class="glass-card group p-8 rounded-[2rem] reveal bg-gradient-to-r from-neutral-900 to-primary text-white md:col-span-2 border border-neutral-800 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500" style="transition-delay: 0.5s;">
+           <div class="flex items-center justify-between h-full">
+            <div>
+              <h3 class="text-2xl font-bold text-white mb-2">6. O Vestiário VIP</h3>
+              <p class="text-sm text-neutral-300 max-w-sm">
+                Evolua ao lado de atletas que têm o mesmo nível de exigência e ambição que você.
+              </p>
+            </div>
+            <div class="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-md group-hover:rotate-45 transition-transform duration-500">
+              <i data-lucide="messages-square" class="w-6 h-6 text-accent"></i>
+            </div>
+           </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SEÇÃO 4: DIVISÃO DOS ALUNOS POR FAIXA ETÁRIA
+       ============================================================ -->
+  <section id="faixas-etarias" class="py-24 bg-white border-t border-neutral-200 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary">O Idioma Certo</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-primary tracking-tight mt-2 font-display">
+          Um Método Adaptado Para a <br/><span class="text-gradient-accent">Sua Fase de Evolução</span>
+        </h2>
+      </div>
+
+      <!-- Age Tabs Navigation -->
+      <div class="flex items-center justify-center gap-3 mb-12 flex-wrap reveal">
+        <button onclick="selectAgeGroup(1)" id="tab-group-1" class="age-tab px-6 py-3 rounded-full text-sm font-bold bg-primary text-white shadow-md transition-all">
+          Grupo 1 • 10 a 13 anos
+        </button>
+        <button onclick="selectAgeGroup(2)" id="tab-group-2" class="age-tab px-6 py-3 rounded-full text-sm font-bold bg-white text-primary border border-neutral-300 hover:bg-neutral-50 transition-all">
+          Grupo 2 • 13 a 15 anos
+        </button>
+        <button onclick="selectAgeGroup(3)" id="tab-group-3" class="age-tab px-6 py-3 rounded-full text-sm font-bold bg-white text-primary border border-neutral-300 hover:bg-neutral-50 transition-all">
+          Grupo 3 • 15 a 20 anos
+        </button>
+      </div>
+
+      <!-- Group Content Cards Container -->
+      <div class="max-w-4xl mx-auto">
+        <!-- Group 1 Content -->
+        <div id="content-group-1" class="age-content glass-card bg-surface p-8 sm:p-10 rounded-3xl shadow-xl reveal">
+          <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+              <span class="px-3 py-1 text-xs font-bold text-secondary bg-secondary-soft rounded-full border border-blue-200">10 a 13 Anos</span>
+              <h3 class="text-2xl font-black text-primary font-display">Despertando o DNA Tático</h3>
+            </div>
+          </div>
+          <p class="text-sm text-neutral-600 leading-relaxed mb-6 font-medium">
+            Nesta etapa inicial, o objetivo principal é despertar o prazer de entender o jogo através de animações divertidas e analogias simples.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-neutral-200">
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Noções de espaço e visão</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Funções de cada posição</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Vídeos curtos de 5 minutos</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Decisão sem pressão</span></div>
+          </div>
+        </div>
+
+        <!-- Group 2 Content -->
+        <div id="content-group-2" class="age-content hidden glass-card bg-surface p-8 sm:p-10 rounded-3xl shadow-xl">
+          <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+              <span class="px-3 py-1 text-xs font-bold text-secondary bg-secondary-soft rounded-full border border-blue-200">13 a 15 Anos</span>
+              <h3 class="text-2xl font-black text-primary font-display">Leitura Espacial & Antecipação</h3>
+            </div>
+          </div>
+          <p class="text-sm text-neutral-600 leading-relaxed mb-6 font-medium">
+            Fase de transição crítica. Ensinamos a ler a estrutura tática adversária, criar linhas de passe e antecipar jogadas.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-neutral-200">
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Movimentação sem bola</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Leitura de bloco defensivo</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Exercícios interativos</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Discussões de jogos PRO</span></div>
+          </div>
+        </div>
+
+        <!-- Group 3 Content -->
+        <div id="content-group-3" class="age-content hidden glass-card bg-surface p-8 sm:p-10 rounded-3xl shadow-xl">
+          <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+            <div class="flex items-center gap-3">
+              <span class="px-3 py-1 text-xs font-bold text-secondary bg-secondary-soft rounded-full border border-blue-200">15 a 20 Anos</span>
+              <h3 class="text-2xl font-black text-primary font-display">Alto Rendimento & Visão Profissional</h3>
+            </div>
+          </div>
+          <p class="text-sm text-neutral-600 leading-relaxed mb-6 font-medium">
+            Preparação para o futebol profissional. Foco em detalhes de modelo de jogo, transições rápidas e análise individual.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-neutral-200">
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Modelos de jogo complexos</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Análise de mapa de calor</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Simulações de preleção</span></div>
+            <div class="flex items-start gap-3"><i data-lucide="check-circle2" class="w-5 h-5 text-secondary shrink-0"></i><span class="text-sm font-semibold text-primary">Preparação mental PRO</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SEÇÃO 5: QUEM SOMOS (DARK MODE THEMED SECTION FROM SYSTEM)
+       ============================================================ -->
+  <section id="quem-somos" class="py-24 bg-primary text-white relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-[550px] h-[550px] bg-secondary/20 blur-3xl rounded-full pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="text-center max-w-4xl mx-auto mb-16 reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-accent">Nossa Filosofia Mestre</span>
+        <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight mt-2 leading-tight font-display text-stroke-sm">
+          “Não ensinamos futebol.<br/>Ensinamos atletas a entender futebol.”
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
+        <div class="lg:col-span-7 space-y-6 reveal">
+          <span class="px-3 py-1 text-xs font-bold text-accent bg-white/10 border border-white/20 rounded-full">
+            ORIGEM DA METODOLOGIA
+          </span>
+          <h3 class="text-2xl sm:text-3xl font-black text-white font-display">
+            A Inteligência dos Profissionais, Acessível na Base
+          </h3>
+          <p class="text-base text-neutral-300 leading-relaxed font-medium">
+            Enquanto a nossa empresa parceira <strong>Scout Vision</strong> atende atletas profissionais com análises táticas de alto rendimento, percebemos que a base ficava esquecida. Criamos a <strong>Next Decision</strong> para entregar exatamente a mesma metodologia de leitura de jogo da elite, mas de forma escalável e adaptada para você.
+          </p>
+          <div class="flex flex-wrap gap-2.5 pt-2">
+            <span class="px-3.5 py-1.5 text-xs font-bold bg-white/10 text-white border border-white/20 rounded-xl">Inteligência</span>
+            <span class="px-3.5 py-1.5 text-xs font-bold bg-white/10 text-white border border-white/20 rounded-xl">Aprendizado Contínuo</span>
+            <span class="px-3.5 py-1.5 text-xs font-bold bg-white/10 text-white border border-white/20 rounded-xl">Evolução</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 reveal" style="transition-delay: 0.15s;">
+          <div class="glass-card bg-white/10 backdrop-blur-xl p-4 rounded-3xl shadow-2xl relative overflow-hidden group border border-white/20">
+            <img src="img/IMG_5755.JPG.jpeg" alt="Tática Next Decision" class="w-full h-80 object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500 opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-transparent to-transparent p-6 flex flex-col justify-end">
+              <span class="text-xs font-mono text-accent uppercase font-bold">SCOUT VISION & NEXT DECISION</span>
+              <span class="text-base font-bold text-white mt-1">Análise Tática de Alta Performance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SEÇÃO 6: PLANOS DE ASSINATURA
+       ============================================================ -->
+  <section id="planos" class="py-24 bg-bg border-t border-neutral-200 relative bg-grid-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary">O Seu Momento</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-primary tracking-tight mt-2 font-display">
+          Escolha o Nível da Sua <span class="text-gradient-primary">Evolução Tática</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <!-- PLANO ESSENCIAL -->
+        <div class="glass-card bg-white p-8 sm:p-10 rounded-3xl border border-neutral-200 hover:border-primary transition-all shadow-card flex flex-col justify-between reveal">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 text-xs font-bold text-primary bg-neutral-100 rounded-full border border-neutral-200">PLANO ESSENCIAL</span>
+              <span class="text-xs text-neutral-500 font-semibold">Iniciação Tática</span>
+            </div>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-sm font-bold text-neutral-500">R$</span>
+              <span class="text-5xl font-black text-primary font-display">197</span>
+              <span class="text-sm font-semibold text-neutral-500">/mês</span>
+            </div>
+            <ul class="space-y-4 text-sm text-primary mb-8 font-semibold">
+              <li class="flex items-center gap-3"><i data-lucide="check" class="w-4.5 h-4.5 text-secondary"></i><span>Reuniões ao vivo periódicas</span></li>
+              <li class="flex items-center gap-3"><i data-lucide="check" class="w-4.5 h-4.5 text-secondary"></i><span>Acesso à biblioteca de replays</span></li>
+              <li class="flex items-center gap-3"><i data-lucide="check" class="w-4.5 h-4.5 text-secondary"></i><span>Participação na comunidade</span></li>
+            </ul>
+          </div>
+          <button onclick="selectPlan('Essencial', 197)" class="w-full py-4 px-6 text-sm font-bold text-primary bg-neutral-100 hover:bg-neutral-200 rounded-full border border-neutral-200 transition-all active:scale-95">
+            COMEÇAR MINHA EVOLUÇÃO
+          </button>
+        </div>
+
+        <!-- PLANO PREMIUM -->
+        <div class="glass-card bg-white p-8 sm:p-10 rounded-3xl border-2 border-secondary shadow-glow relative flex flex-col justify-between reveal" style="transition-delay: 0.15s;">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 text-[11px] font-black text-white bg-secondary rounded-full shadow-md uppercase tracking-wider">
+            🔥 MAIS RECOMENDADO
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-4 mt-2">
+              <span class="px-3 py-1 text-xs font-bold text-secondary bg-secondary-soft rounded-full border border-blue-200">PLANO PREMIUM</span>
+            </div>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-sm font-bold text-neutral-500">R$</span>
+              <span class="text-5xl font-black text-primary font-display">327</span>
+              <span class="text-sm font-semibold text-neutral-500">/mês</span>
+            </div>
+            <ul class="space-y-4 text-sm text-primary mb-8 font-semibold">
+              <li class="flex items-center gap-3 font-extrabold"><i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-secondary"></i><span>Tudo incluso no Essencial +</span></li>
+              <li class="flex items-center gap-3"><i data-lucide="check" class="w-4.5 h-4.5 text-secondary"></i><span>Conteúdos individuais avançados</span></li>
+              <li class="flex items-center gap-3"><i data-lucide="check" class="w-4.5 h-4.5 text-secondary"></i><span>Exercícios táticos semanais</span></li>
+              <li class="flex items-center gap-3"><i data-lucide="star" class="w-4.5 h-4.5 text-secondary fill-secondary"></i><span class="font-extrabold">Convidado Especial (Elite PRO)</span></li>
+            </ul>
+          </div>
+          <button onclick="selectPlan('Premium', 327)" class="btn-shine w-full py-4 px-6 text-sm font-bold text-white bg-secondary hover:bg-blue-700 rounded-full shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+            <i data-lucide="zap" class="w-4.5 h-4.5"></i> GARANTIR VAGA PREMIUM
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SEÇÃO 7: MARQUEE ANIMADA
+       ============================================================ -->
+  <section class="py-12 bg-primary text-white overflow-hidden relative border-y border-neutral-800">
+    <div class="animate-marquee flex items-center gap-12 whitespace-nowrap">
+      <span class="text-xl font-black text-white flex items-center gap-3 font-display"><i data-lucide="sparkles" class="w-5 h-5 text-accent"></i>Entenda o jogo. Tome melhores decisões.</span>
+      <span class="text-xl font-black text-accent flex items-center gap-3 font-display"><i data-lucide="zap" class="w-5 h-5 text-white"></i>A inteligência é o diferencial.</span>
+      <span class="text-xl font-black text-white flex items-center gap-3 font-display"><i data-lucide="shield" class="w-5 h-5 text-accent"></i>Jogue um passo à frente.</span>
+      
+      <!-- Duplicate -->
+      <span class="text-xl font-black text-white flex items-center gap-3 font-display"><i data-lucide="sparkles" class="w-5 h-5 text-accent"></i>Entenda o jogo. Tome melhores decisões.</span>
+      <span class="text-xl font-black text-accent flex items-center gap-3 font-display"><i data-lucide="zap" class="w-5 h-5 text-white"></i>A inteligência é o diferencial.</span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SEÇÃO 8: PERGUNTAS FREQUENTES (FAQ)
+       ============================================================ -->
+  <section id="faq" class="py-24 bg-white border-t border-neutral-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+        <span class="text-xs font-bold uppercase tracking-widest text-secondary">Tire Suas Dúvidas</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-primary tracking-tight mt-2 font-display">Perguntas Frequentes</h2>
+      </div>
+
+      <div class="space-y-4 reveal">
+        <div class="faq-item glass-card bg-surface rounded-2xl border border-neutral-200 overflow-hidden cursor-pointer shadow-sm" onclick="toggleFaq(this)">
+          <div class="p-6 flex items-center justify-between gap-4">
+            <h3 class="text-base font-bold text-primary">A Next Decision substitui o treino no clube?</h3>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neutral-400 transition-transform duration-300"></i>
+          </div>
+          <div class="faq-answer px-6 text-sm text-neutral-600 font-medium"><p class="pb-6">Não. Nós complementamos o treino prático ensinando a mente do atleta a ler o jogo e decidir rápido.</p></div>
+        </div>
+        <div class="faq-item glass-card bg-surface rounded-2xl border border-neutral-200 overflow-hidden cursor-pointer shadow-sm" onclick="toggleFaq(this)">
+          <div class="p-6 flex items-center justify-between gap-4">
+            <h3 class="text-base font-bold text-primary">Qual é a idade recomendada para participar?</h3>
+            <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neutral-400 transition-transform duration-300"></i>
+          </div>
+          <div class="faq-answer px-6 text-sm text-neutral-600 font-medium"><p class="pb-6">Atendemos atletas dos 10 aos 20 anos, divididos em 3 turmas específicas de faixa etária.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CTA & FOOTER
+       ============================================================ -->
+  <section class="py-20 bg-bg relative overflow-hidden border-t border-neutral-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <div class="max-w-3xl mx-auto space-y-6 reveal">
+        <h2 class="text-4xl sm:text-6xl font-black text-primary tracking-tight leading-tight font-display">
+          A Sua Próxima Partida <br/><span class="text-gradient-primary">Começa na Mente.</span>
+        </h2>
+        <div class="pt-4">
+          <a href="#planos" class="btn-shine inline-flex items-center gap-2 px-9 py-4 text-sm font-bold text-white bg-secondary hover:bg-blue-700 rounded-full shadow-glow transition-all hover:scale-105 active:scale-95">
+            <i data-lucide="zap" class="w-4.5 h-4.5 animate-pulse"></i>
+            <span>GARANTIR MINHA VAGA</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-20 border-t border-neutral-200 pt-12 pb-8 text-neutral-500 text-xs">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3.5">
+          <img src="img/IMG_5812.PNG" alt="Next Decision" class="w-8 h-8 object-contain rounded-lg bg-primary">
+          <span class="font-black text-primary text-sm tracking-tight font-display">NEXT DECISION</span>
+        </div>
+        <div class="text-center font-medium">&copy; 2026 Next Decision. Todos os direitos reservados.</div>
+      </div>
+    </footer>
+  </section>
+
+  <!-- MODALS & TOAST -->
+  <div id="video-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-primary/85 backdrop-blur-md transition-opacity">
+    <div class="w-full max-w-3xl rounded-3xl p-6 relative bg-white shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="text-base font-bold text-primary">Vídeo Institucional</h4>
+        <button onclick="closeVideoModal()" class="text-neutral-500 hover:text-primary"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <video id="modal-video-player" class="w-full aspect-video rounded-xl bg-primary" controls><source src="mp4/hero_section.mp4" type="video/mp4"></video>
+    </div>
+  </div>
+
+  <div id="toast-notify" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 bg-primary text-white rounded-2xl shadow-2xl transform translate-y-32 transition-transform duration-300">
+    <i data-lucide="check-circle2" class="w-5 h-5 text-secondary"></i>
+    <span class="text-xs font-semibold" id="toast-msg">Sucesso!</span>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    
+    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+    function selectAgeGroup(num) {
+      [1, 2, 3].forEach(n => {
+        document.getElementById(`tab-group-${n}`).className = n === num ? "age-tab px-6 py-3 rounded-full text-sm font-bold bg-primary text-white shadow-md transition-all" : "age-tab px-6 py-3 rounded-full text-sm font-bold bg-white text-primary border border-neutral-300 hover:bg-neutral-50 transition-all";
+        const c = document.getElementById(`content-group-${n}`);
+        n === num ? c.classList.remove('hidden') : c.classList.add('hidden');
+      });
+    }
+    function toggleFaq(el) {
+      const active = el.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if(!active) el.classList.add('active');
+    }
+    function openVideoModal() {
+      const m = document.getElementById('video-modal'); m.classList.remove('hidden'); m.classList.add('flex');
+      document.getElementById('modal-video-player').play();
+    }
+    function closeVideoModal() {
+      const m = document.getElementById('video-modal'); m.classList.add('hidden'); m.classList.remove('flex');
+      document.getElementById('modal-video-player').pause();
+    }
+    function selectPlan(plan, price) {
+      const t = document.getElementById('toast-notify');
+      document.getElementById('toast-msg').textContent = `Plano ${plan} selecionado!`;
+      t.classList.remove('translate-y-32'); setTimeout(() => t.classList.add('translate-y-32'), 3000);
+    }
+  </script>
+</body>
+</html>
