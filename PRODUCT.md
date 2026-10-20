@@ -10,7 +10,7 @@ brand
 
 **Principal:** atletas de futebol de base. Estão na base, treinam com frequência, jogam com frequência, e não recebem educação tática formal. Consomem no celular, geralmente à noite, depois do treino.
 
-**Secundário:** pais e responsáveis. São eles que pagam a assinatura. Precisam entender rapidamente o que o filho vai receber, se é seguro e se dá para cancelar. Existe um único plano, pago no mensal (R$ 397/mês) ou no anual (12x de R$ 197 sem juros, total R$ 2.364).
+**Secundário:** pais e responsáveis. São eles que pagam a assinatura. Precisam entender rapidamente o que o filho vai receber, se é seguro e se dá para cancelar. Existe um único plano, com três formas de pagar: mensal (R$ 297/mês, sem fidelidade), semestral (6x de R$ 247, total R$ 1.482, ou R$ 1.407,90 à vista no Pix, fidelidade de 6 meses) e anual (12x de R$ 197, total R$ 2.364, ou R$ 2.127,60 à vista no Pix, fidelidade de 12 meses). A Turma Fundadora é vendida fora do site. Preços conforme "Ajustes do site Next Decision" (13/out/2026).
 
 **Terciário:** clubes, escolinhas e treinadores, que avaliam a plataforma como complemento ao trabalho de campo.
 
@@ -20,7 +20,7 @@ Job to be done: entender o jogo bem o suficiente para decidir melhor dentro de c
 
 Plataforma de desenvolvimento tático. Não é curso, não é mentoria, não é canal de vídeos.
 
-Leva a mesma metodologia de leitura de jogo que a equipe da Next Decision aplica em atletas profissionais para milhares de atletas de base simultaneamente, mantendo qualidade e acessibilidade. Todo mês a plataforma trabalha um indicador de desempenho tático ao longo de quatro semanas: encontro ao vivo de abertura, dez vídeos curtos de análise (cinco por semana nas semanas 2 e 3), encontro ao vivo de encerramento e comunidade com quizzes, desafios e coleta de dúvidas durante o mês inteiro. Missão: democratizar a inteligência tática no futebol. Visão: ser a maior plataforma de educação tática para atletas de base da América Latina.
+Leva a mesma metodologia de leitura de jogo que a equipe da Next Decision aplica em atletas profissionais para milhares de atletas de base simultaneamente, mantendo qualidade e acessibilidade. Todo mês a plataforma trabalha um indicador de desempenho tático ao longo de quatro semanas: encontro ao vivo de abertura, dez vídeos curtos de análise (cinco por semana nas semanas 2 e 3), encontro ao vivo de encerramento e comunidade com quizzes, desafios e coleta de dúvidas durante o mês inteiro. Missão: levar a inteligência tática para a base. Visão: ser referência em educação tática de base no Brasil. Assinatura da marca: "Inteligência de jogo desde a base."
 
 Sucesso: o atleta entende o que o treinador pede antes de ele pedir, e o responsável enxerga valor recorrente suficiente para manter a assinatura.
 

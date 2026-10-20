@@ -271,6 +271,11 @@ section[id],main{scroll-margin-top:92px}
     radial-gradient(120% 85% at 50% 8%,rgba(12,35,64,.15),rgba(12,35,64,.92) 100%);
 }
 .hero__inner{max-width:56rem}
+.hero__sign{
+  display:flex;align-items:center;gap:.75rem;margin-bottom:1.4rem;
+  font-size:var(--fs-sm);font-weight:700;color:var(--on-navy-soft);letter-spacing:-.01em;
+}
+.hero__sign::before{content:"";width:28px;height:2px;border-radius:2px;background:#fff;flex:none}
 .hero h1{color:#fff;margin-bottom:1.6rem}
 .hero__lead{
   font-size:var(--fs-lead);line-height:1.6;color:var(--on-navy-soft);max-width:44rem;
@@ -459,7 +464,12 @@ section[id],main{scroll-margin-top:92px}
   margin-top:clamp(3rem,6vw,4.5rem);
   display:grid;gap:1rem;
 }
-@media (min-width:760px){.parents{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:640px){.parents{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.parents{grid-template-columns:repeat(4,1fr)}}
+.parents__lead{
+  font-size:var(--fs-lead);line-height:1.55;color:#fff;font-weight:700;letter-spacing:-.015em;
+  max-width:44rem;margin-bottom:1.5rem;
+}
 .parent{
   display:grid;grid-template-columns:auto 1fr;gap:.85rem;align-items:start;
   padding:1.25rem 1.35rem;border-radius:var(--r);
@@ -470,13 +480,32 @@ section[id],main{scroll-margin-top:92px}
 .parent strong{display:block;color:#fff;font-weight:800;margin-bottom:.15rem}
 .parents__label{font-size:var(--fs-xs);font-weight:700;color:var(--on-navy-muted);letter-spacing:.02em;margin-bottom:1rem}
 
-/* ---------- atletas ---------- */
-.athletes{display:grid;gap:1.5rem}
-@media (min-width:640px){.athletes{grid-template-columns:repeat(3,1fr);gap:1.75rem}}
+/* ---------- atletas: carrossel horizontal ---------- */
+.carousel{position:relative}
+.athletes{
+  display:flex;gap:1.25rem;
+  margin-inline:calc(-1 * var(--gutter));padding:4px var(--gutter) .75rem;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+}
+.athletes::-webkit-scrollbar{display:none}
+.athletes:focus-visible{outline-offset:-3px}
 .athlete{
+  flex:0 0 clamp(230px,70vw,300px);scroll-snap-align:start;
   margin:0;position:relative;border-radius:var(--r-lg);overflow:hidden;
   border:1px solid var(--line-navy);background:var(--card-navy);
 }
+.carousel__nav{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.25rem}
+.carousel__btn{
+  width:48px;height:48px;border-radius:var(--r-pill);
+  border:1px solid var(--line-navy-strong);background:transparent;color:#fff;
+  display:grid;place-items:center;cursor:pointer;
+  transition:border-color .2s,background-color .2s;
+}
+.carousel__btn:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.carousel__btn svg{width:20px;height:20px}
+.carousel__btn--prev svg{transform:rotate(180deg)}
 .athlete img{
   width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;
   transition:transform .6s var(--ease);
@@ -505,8 +534,12 @@ section[id],main{scroll-margin-top:92px}
 .included span{font-size:var(--fs-xs);line-height:1.5;color:var(--on-navy-soft)}
 
 /* ---------- plano ---------- */
-.plans{display:grid;gap:1.5rem;align-items:stretch;max-width:60rem;margin-inline:auto}
-@media (min-width:800px){.plans{grid-template-columns:1fr 1.08fr;gap:1.75rem}}
+.plans{display:grid;gap:1.5rem;align-items:stretch;max-width:64rem;margin-inline:auto}
+@media (min-width:700px) and (max-width:999.98px){
+  .plans{grid-template-columns:1fr 1fr}
+  .plan--featured{grid-column:1 / -1}
+}
+@media (min-width:1000px){.plans{grid-template-columns:1fr 1fr 1.1fr;max-width:none}}
 .plan{
   display:flex;flex-direction:column;
   padding:clamp(1.75rem,3.5vw,2.5rem);
@@ -532,8 +565,20 @@ section[id],main{scroll-margin-top:92px}
 .plan__price .per{font-size:var(--fs-sm);font-weight:600;color:var(--on-navy-muted)}
 .plan--featured .plan__price .pre,.plan--featured .plan__price .val{color:var(--ink)}
 .plan--featured .plan__price .cur,.plan--featured .plan__price .per{color:var(--ink-muted)}
-.plan__total{font-size:var(--fs-sm);font-weight:600;color:var(--on-navy-muted);margin-bottom:1.5rem}
+.plan__total{font-size:var(--fs-sm);font-weight:600;color:var(--on-navy-muted);margin-bottom:.75rem}
 .plan--featured .plan__total{color:var(--ink-muted)}
+.plan__pix{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .6rem;
+  margin-bottom:1.25rem;font-size:var(--fs-sm);font-weight:700;color:#fff;line-height:1.4;
+}
+.plan__pix-label{
+  display:inline-block;padding:.15rem .55rem;border-radius:var(--r-pill);
+  border:1px solid var(--line-navy-strong);font-size:var(--fs-micro);font-weight:800;
+}
+.plan__pix-off{font-weight:600;color:var(--on-navy-muted)}
+.plan--featured .plan__pix{color:var(--ink)}
+.plan--featured .plan__pix-label{border-color:var(--line-white-strong)}
+.plan--featured .plan__pix-off{color:var(--ink-muted)}
 .plan__save{
   display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:center;
   padding:.95rem 1.1rem;border-radius:var(--r-sm);margin-bottom:1.5rem;
@@ -585,6 +630,7 @@ section[id],main{scroll-margin-top:92px}
 @media (min-width:820px){.footer__grid{grid-template-columns:1.4fr 1fr 1fr;gap:3rem}}
 .footer img{height:32px;width:auto;margin-bottom:1.25rem}
 .footer p{font-size:var(--fs-sm);line-height:1.6;max-width:38ch}
+.footer__sign{color:#fff;font-weight:800;letter-spacing:-.015em;margin-bottom:.6rem}
 .footer h4{font-size:var(--fs-xs);font-weight:800;color:#fff;margin-bottom:1.1rem;letter-spacing:.02em}
 .footer ul{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}
 .footer a{color:var(--on-navy-muted);text-decoration:none;transition:color .2s}
@@ -623,8 +669,9 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
   .js [data-reveal]{opacity:0;transform:translateY(20px)}
   .js [data-reveal].in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
   .hero__inner > *{animation:rise .9s var(--ease) backwards}
-  .hero h1{animation-delay:.05s}
-  .hero__lead{animation-delay:.16s}
+  .hero__sign{animation-delay:0s}
+  .hero h1{animation-delay:.08s}
+  .hero__lead{animation-delay:.18s}
   .hero__actions{animation-delay:.26s}
   .hero__proof{animation-delay:.34s}
   .facts{animation:rise .9s var(--ease) .42s backwards}
@@ -721,6 +768,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
 
   <div class="wrap">
     <div class="hero__inner">
+      <p class="hero__sign">Inteligência de jogo desde a base.</p>
       <h1>
         Entenda o jogo.<br>
         Tome melhores <span class="mark">decisões<svg class="mark__line" viewBox="0 0 340 14" preserveAspectRatio="none" aria-hidden="true"><path d="M4 10C70 3 190 2 336 7"/></svg></span>.
@@ -728,7 +776,8 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
 
       <p class="hero__lead">
         A Next Decision é uma plataforma de desenvolvimento tático para atletas de base.
-        A mesma leitura de jogo que a elite usa, adaptada para quem está construindo a carreira.
+        A mesma leitura de jogo que usamos com profissionais na Scout Vision, em vídeos curtos
+        e encontros ao vivo, para o seu filho entender o jogo e decidir melhor dentro de campo.
       </p>
 
       <div class="hero__actions">
@@ -744,14 +793,14 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
 
       <p class="hero__proof">
         <svg aria-hidden="true"><use href="#i-shield"/></svg>
-        <span>Criada por profissionais que analisam atletas de alto rendimento todos os dias.</span>
+        <span>Metodologia da Scout Vision PRO, testada na elite. Quem prepara o conteúdo analisa atletas de alto rendimento todos os dias.</span>
       </p>
     </div>
 
     <div class="facts" aria-label="Resumo do que a assinatura inclui">
       <div class="fact"><span class="fact__num">1</span><span class="fact__label">indicador tático por mês</span></div>
-      <div class="fact"><span class="fact__num">2</span><span class="fact__label">encontros ao vivo por mês</span></div>
-      <div class="fact"><span class="fact__num">10</span><span class="fact__label">vídeos curtos de análise</span></div>
+      <div class="fact"><span class="fact__num">2</span><span class="fact__label">encontros ao vivo de 50 minutos por mês</span></div>
+      <div class="fact"><span class="fact__num">10</span><span class="fact__label">vídeos de 2 a 4 minutos por mês</span></div>
       <div class="fact"><span class="fact__num">4</span><span class="fact__label">semanas para dominar cada indicador</span></div>
     </div>
   </div>
@@ -765,9 +814,9 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
       <hr class="rule">
       <h2>Treina muito. Joga muito. Entende pouco.</h2>
       <p>
-        Na base sobra treino técnico e sobra preparação física. O que quase ninguém oferece é
-        educação tática: ensinar o atleta a ler o espaço, antecipar a jogada e escolher a melhor
-        opção antes da bola chegar.
+        Na base, treino técnico e físico são a regra. A educação tática raramente é estruturada:
+        ensinar o atleta a ler o espaço, antecipar a jogada e escolher a melhor opção antes da
+        bola chegar.
       </p>
     </div>
 
@@ -775,21 +824,21 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
       <div class="meter">
         <div class="meter__top">
           <span class="meter__name">Treino técnico</span>
-          <span class="meter__note">Presente em praticamente todo clube</span>
+          <span class="meter__note">A regra na base</span>
         </div>
         <div class="meter__track"><div class="meter__fill" style="--w:88%"></div></div>
       </div>
       <div class="meter">
         <div class="meter__top">
           <span class="meter__name">Preparação física</span>
-          <span class="meter__note">Presente em praticamente todo clube</span>
+          <span class="meter__note">A regra na base</span>
         </div>
         <div class="meter__track"><div class="meter__fill" style="--w:82%"></div></div>
       </div>
       <div class="meter meter--gap">
         <div class="meter__top">
           <span class="meter__name">Educação tática</span>
-          <span class="meter__note">Raramente ensinada de forma estruturada</span>
+          <span class="meter__note">Raramente estruturada</span>
         </div>
         <div class="meter__track"><div class="meter__fill" style="--w:12%"></div></div>
       </div>
@@ -803,9 +852,10 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
     <div class="manifesto" data-reveal>
       <p class="manifesto__title">Não ensinamos futebol. <span>Ensinamos atletas a entender futebol.</span></p>
       <p style="font-size:var(--fs-lead);line-height:1.6;max-width:52rem">
-        Nossa metodologia nasceu dentro dos campos, com atletas profissionais, em situações reais de jogo.
-        Cada conteúdo vem da prática diária, não de apostilas. Quem prepara o material é quem analisa
-        atleta de alto rendimento todos os dias.
+        Nossa metodologia nasceu dentro dos campos, no trabalho da Scout Vision com atletas profissionais,
+        em situações reais de jogo. Cada conteúdo vem da prática diária, não de apostilas. Quem prepara o
+        material é quem analisa atleta de alto rendimento todos os dias. E o atleta que se profissionaliza
+        segue para a Scout Vision.
       </p>
 
       <div class="nots">
@@ -819,7 +869,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         </div>
         <div class="not">
           <h3><span>Não somos</span> um canal de vídeos.</h3>
-          <p>Vídeo é só um dos formatos. Somos um ecossistema onde o conhecimento vira leitura de jogo real.</p>
+          <p>Vídeo é só um dos formatos. Somos uma plataforma onde o conhecimento vira leitura de jogo real.</p>
         </div>
       </div>
     </div>
@@ -836,7 +886,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
       <p>
         Todo mês a Next Decision escolhe um indicador de desempenho tático: uma situação concreta de jogo
         que o atleta precisa entender e dominar. Durante quatro semanas esse indicador é apresentado ao vivo,
-        analisado em vídeos curtos com exemplos reais, aprofundado e encerrado com a turma.
+        analisado em vídeos de 2 a 4 minutos com exemplos reais, aprofundado e encerrado com a turma.
       </p>
     </div>
 
@@ -853,21 +903,21 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
           <span class="pillars__icon"><svg aria-hidden="true"><use href="#i-live"/></svg></span>
           <div>
             <dt>Ao vivo no começo e no fim</dt>
-            <dd>O mês abre com um encontro que apresenta o indicador e fecha com outro que esclarece as dúvidas da turma.</dd>
+            <dd>O mês abre com um encontro de 50 minutos, no Google Meet, que apresenta o indicador, e fecha com outro que responde as dúvidas selecionadas da turma.</dd>
           </div>
         </div>
         <div class="pillars__row">
           <span class="pillars__icon"><svg aria-hidden="true"><use href="#i-video"/></svg></span>
           <div>
             <dt>Lances reais, em vídeos curtos</dt>
-            <dd>Dez vídeos por mês com análises e exemplos extraídos do futebol profissional, para assistir no celular.</dd>
+            <dd>Dez vídeos de 2 a 4 minutos por mês, com análises e exemplos extraídos do futebol profissional, para assistir no celular.</dd>
           </div>
         </div>
         <div class="pillars__row">
           <span class="pillars__icon"><svg aria-hidden="true"><use href="#i-talk"/></svg></span>
           <div>
-            <dt>Comunidade o mês inteiro</dt>
-            <dd>Quizzes, desafios e interações entre uma etapa e outra. As dúvidas coletadas viram pauta do encontro final.</dd>
+            <dt>Dinâmicas nas semanas 2 e 3</dt>
+            <dd>Dinâmicas de segunda, quarta e sexta nas semanas 2 e 3. O formulário de dúvidas abre na semana 1 e fecha no domingo da semana 3. As melhores dúvidas viram pauta do encontro final.</dd>
           </div>
         </div>
       </dl>
@@ -905,7 +955,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <div>
           <span class="week__label">Semana 1</span>
           <h3>Encontro ao vivo</h3>
-          <p>Apresentamos o indicador do mês e explicamos as situações de jogo que interferem nele.</p>
+          <p>Encontro de 50 minutos no Google Meet. Apresentamos o indicador do mês e explicamos as situações de jogo que interferem nele. O formulário de dúvidas abre aqui.</p>
           <span class="week__tag"><svg aria-hidden="true"><use href="#i-live"/></svg>Ao vivo</span>
         </div>
       </li>
@@ -914,7 +964,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <div>
           <span class="week__label">Semana 2</span>
           <h3>Cinco vídeos curtos</h3>
-          <p>Análises e exemplos reais do indicador em ação, para assistir no seu tempo.</p>
+          <p>Vídeos de 2 a 4 minutos com análises e exemplos reais do indicador em ação, para assistir no seu tempo. Dinâmicas na segunda, quarta e sexta.</p>
           <span class="week__tag"><svg aria-hidden="true"><use href="#i-video"/></svg>5 vídeos</span>
         </div>
       </li>
@@ -923,7 +973,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <div>
           <span class="week__label">Semana 3</span>
           <h3>Mais cinco vídeos curtos</h3>
-          <p>Aprofundamento do indicador: variações, erros comuns e como corrigir cada um deles.</p>
+          <p>O mesmo indicador em posições, funções, biotipos, zonas e contextos diferentes. Dinâmicas na segunda, quarta e sexta. O formulário de dúvidas fecha no domingo.</p>
           <span class="week__tag"><svg aria-hidden="true"><use href="#i-video"/></svg>5 vídeos</span>
         </div>
       </li>
@@ -932,7 +982,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <div>
           <span class="week__label">Semana 4</span>
           <h3>Encontro ao vivo</h3>
-          <p>Esclarecemos as dúvidas coletadas na comunidade e encerramos o conteúdo do mês.</p>
+          <p>Respondemos as dúvidas selecionadas, algumas feitas pelos próprios atletas, e encerramos o conteúdo do mês.</p>
           <span class="week__tag"><svg aria-hidden="true"><use href="#i-live"/></svg>Ao vivo</span>
         </div>
       </li>
@@ -941,8 +991,8 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
     <div class="month" data-reveal>
       <svg aria-hidden="true"><use href="#i-talk"/></svg>
       <div>
-        <strong>Durante todo o mês</strong>
-        <p>Quizzes, desafios, interações e coleta de dúvidas na comunidade. O atleta pratica a leitura entre uma etapa e outra, e nenhuma dúvida fica sem resposta.</p>
+        <strong>Entre uma etapa e outra</strong>
+        <p>Dinâmicas nas semanas 2 e 3 e formulário de dúvidas aberto da semana 1 até o domingo da semana 3. As melhores dúvidas viram pauta do encontro final. As demais recebem resposta curta no grupo.</p>
       </div>
     </div>
   </div>
@@ -974,26 +1024,29 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <li>
           <div>
             <strong>Evolução visível</strong>
-            <span>Treinadores e pais percebem a diferença. Você se destaca porque pensa diferente.</span>
+            <span>Treinadores e pais percebem a diferença. Quem pensa antes e executa com qualidade sai na frente quando os observadores estão assistindo.</span>
           </div>
         </li>
         <li>
           <div>
             <strong>Preparação para o próximo nível</strong>
-            <span>Seja para um teste, uma peneira ou um contrato, você chega mais preparado do que a maioria.</span>
+            <span>Seja para um teste, uma peneira ou um contrato, você chega sabendo o que o jogo pede de você.</span>
           </div>
         </li>
       </ol>
 
       <figure class="gains__photo" data-reveal>
-        <!-- TODO: confirmar com a Next Decision o nome, a posição e o clube deste atleta -->
-        <img src="img/atleta-02.jpg" alt="Atleta da Next Decision comemorando durante uma partida" width="800" height="1066" loading="lazy">
-        <figcaption>Atleta Next Decision<span>Nome, posição e clube a confirmar</span></figcaption>
+        <img src="img/atletas/kaua-elias.jpg" alt="Kauã Elias correndo durante uma partida" width="900" height="1200" loading="lazy">
+        <figcaption>Kauã Elias<span>Atleta acompanhado pela nossa equipe de análise individual</span></figcaption>
       </figure>
     </div>
 
     <div data-reveal>
       <p class="parents__label" style="margin-top:clamp(3rem,6vw,4.5rem)">E para quem acompanha de perto</p>
+      <p class="parents__lead">
+        Num esporte cada vez mais competitivo, quem pensa antes e executa com qualidade sai na frente
+        quando os observadores estão assistindo. É isso que a Next Decision treina, e é isso que você acompanha.
+      </p>
       <div class="parents" style="margin-top:0">
         <div class="parent">
           <svg aria-hidden="true"><use href="#i-marker"/></svg>
@@ -1001,11 +1054,15 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         </div>
         <div class="parent">
           <svg aria-hidden="true"><use href="#i-marker"/></svg>
-          <div><strong>Sem deslocamento</strong>Tudo online, do celular ou do computador, de qualquer cidade.</div>
+          <div><strong>Boletim de evolução</strong>Um relatório trimestral com a evolução do atleta na leitura de jogo, para você acompanhar o que mudou.</div>
         </div>
         <div class="parent">
           <svg aria-hidden="true"><use href="#i-marker"/></svg>
-          <div><strong>Sem complicação</strong>Um único plano, com tudo incluído. Você escolhe só a forma de pagamento.</div>
+          <div><strong>Sem deslocamento</strong>Tudo online, do celular ou do computador, de qualquer lugar do Brasil.</div>
+        </div>
+        <div class="parent">
+          <svg aria-hidden="true"><use href="#i-marker"/></svg>
+          <div><strong>Sem complicação</strong>Três formas de pagar, o mesmo conteúdo em todas. E 7 dias para desistir se não for o que você esperava.</div>
         </div>
       </div>
     </div>
@@ -1014,41 +1071,55 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
 
 <!-- ============================ 6. ATLETAS CLIENTES ============================ -->
 <!--
-  Os três cards abaixo usam as fotos que vieram do material da Next Decision.
-  Preencher nome, posição e clube de cada atleta antes de publicar, e trocar o alt
-  da imagem pelo nome do atleta. Para incluir mais atletas, duplique um <figure class="athlete">.
+  Carrossel horizontal (rola para o lado, com setas e rolagem automática que pausa ao interagir).
+  As fotos ficam em img/atletas/. Para incluir mais atletas, duplique um <figure class="athlete">.
+  Para mostrar posição e clube, acrescente <span class="athlete__meta">Posição · Clube</span>
+  logo depois de .athlete__name.
 -->
 <section class="section section--navy" id="atletas">
   <div class="lanes" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head" data-reveal>
       <hr class="rule">
-      <h2>Atletas que fazem parte da Next Decision</h2>
-      <p>Jogadores que usam a nossa metodologia de leitura de jogo no dia a dia do alto rendimento. A mesma metodologia que chega até você.</p>
+      <h2>Atletas que fazem parte do nosso ecossistema de análise individual</h2>
+      <p>Jogadores de alto rendimento que usam a mesma metodologia na Scout Vision, no dia a dia do profissional. A mesma leitura de jogo que chega até você.</p>
     </div>
 
-    <div class="athletes" data-reveal>
-      <figure class="athlete">
-        <img src="img/atleta-01.jpg" alt="Atleta da Next Decision comemorando um gol" width="371" height="494" loading="lazy">
-        <figcaption>
-          <span class="athlete__name">Nome do atleta</span>
-          <span class="athlete__meta">Posição · Clube</span>
-        </figcaption>
-      </figure>
-      <figure class="athlete">
-        <img src="img/atleta-02.jpg" alt="Atleta da Next Decision durante uma partida" width="800" height="1066" loading="lazy">
-        <figcaption>
-          <span class="athlete__name">Nome do atleta</span>
-          <span class="athlete__meta">Posição · Clube</span>
-        </figcaption>
-      </figure>
-      <figure class="athlete">
-        <img src="img/atleta-03.jpg" alt="Atleta da Next Decision segurando a camisa do novo clube" width="320" height="426" loading="lazy">
-        <figcaption>
-          <span class="athlete__name">Nome do atleta</span>
-          <span class="athlete__meta">Posição · Clube</span>
-        </figcaption>
-      </figure>
+    <div class="carousel" data-reveal>
+      <div class="athletes" id="athletes-track" role="region" aria-label="Atletas do nosso ecossistema de análise individual" tabindex="0">
+        <figure class="athlete">
+          <img src="img/atletas/murillo.jpg" alt="Murillo em campo durante uma partida" width="1200" height="1200" loading="lazy">
+          <figcaption><span class="athlete__name">Murillo</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/kaua-elias.jpg" alt="Kauã Elias correndo durante uma partida" width="900" height="1200" loading="lazy">
+          <figcaption><span class="athlete__name">Kauã Elias</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/pedrinho.jpg" alt="Pedrinho conduzindo a bola durante uma partida" width="640" height="798" loading="lazy">
+          <figcaption><span class="athlete__name">Pedrinho</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/welington.jpg" alt="Welington conduzindo a bola durante uma partida" width="1200" height="800" loading="lazy">
+          <figcaption><span class="athlete__name">Welington</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/juan.jpg" alt="Juan comemorando um gol" width="960" height="1200" loading="lazy">
+          <figcaption><span class="athlete__name">Juan</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/gabriel-mec.jpg" alt="Gabriel Mec em treino" width="900" height="1200" loading="lazy">
+          <figcaption><span class="athlete__name">Gabriel Mec</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/breno-bidon.jpg" alt="Breno Bidon em campo durante uma partida" width="959" height="1200" loading="lazy">
+          <figcaption><span class="athlete__name">Breno Bidon</span></figcaption>
+        </figure>
+      </div>
+      <div class="carousel__nav">
+        <button class="carousel__btn carousel__btn--prev" type="button" data-carousel-prev aria-label="Atleta anterior"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button class="carousel__btn" type="button" data-carousel-next aria-label="Próximo atleta"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
     </div>
 
     <p class="athletes__note" data-reveal>Fotos cedidas pelos próprios atletas e pelos clubes.</p>
@@ -1067,7 +1138,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
     <ul class="included" data-reveal>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <div><strong>2 encontros ao vivo por mês</strong><span>Abertura e encerramento de cada indicador, com a turma.</span></div>
+        <div><strong>2 encontros ao vivo por mês</strong><span>Abertura e encerramento de cada indicador, 50 minutos cada, no Google Meet.</span></div>
       </li>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
@@ -1075,27 +1146,27 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
       </li>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <div><strong>10 vídeos curtos por mês</strong><span>Análises e exemplos reais do indicador em ação.</span></div>
+        <div><strong>10 vídeos curtos por mês</strong><span>De 2 a 4 minutos cada, com análises e exemplos reais do indicador em ação.</span></div>
       </li>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <div><strong>Conteúdos individuais por posição</strong><span>O que o indicador do mês cobra de você no seu setor.</span></div>
+        <div><strong>Exemplos de várias posições, funções e biotipos</strong><span>O mesmo indicador visto do lugar de cada atleta no campo.</span></div>
       </li>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <div><strong>Exercícios toda semana</strong><span>Tarefas de decisão para levar o conceito ao treino.</span></div>
+        <div><strong>Dinâmicas nas semanas 2 e 3</strong><span>Segunda, quarta e sexta: seis dinâmicas por mês para levar o conceito ao treino.</span></div>
       </li>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <div><strong>Quizzes e desafios</strong><span>Para testar a leitura entre uma etapa e outra do mês.</span></div>
+        <div><strong>Formulário de dúvidas</strong><span>Aberto da semana 1 ao domingo da semana 3. As melhores viram pauta do encontro final.</span></div>
       </li>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <div><strong>Comunidade de atletas</strong><span>Interações, discussões e coleta de dúvidas durante todo o mês.</span></div>
+        <div><strong>Comunidade de atletas</strong><span>Grupo com a turma para as dinâmicas e as respostas curtas às dúvidas do mês.</span></div>
       </li>
       <li>
         <svg aria-hidden="true"><use href="#i-check"/></svg>
-        <div><strong>Estudos de jogo</strong><span>Lances do futebol profissional destrinchados passo a passo.</span></div>
+        <div><strong>Boletim de evolução</strong><span>Relatório trimestral para o responsável acompanhar a evolução do atleta.</span></div>
       </li>
     </ul>
   </div>
@@ -1107,17 +1178,22 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
   <div class="wrap">
     <div class="section-head section-head--center" data-reveal>
       <hr class="rule">
-      <h2>Um plano. Duas formas de pagar.</h2>
-      <p>O conteúdo é o mesmo nas duas opções. A diferença está só em como você prefere pagar.</p>
+      <h2>Três formas de pagar. O mesmo conteúdo.</h2>
+      <p>O acesso é completo em qualquer opção. Você escolhe só a forma de pagamento, e tem 7 dias para desistir, sem burocracia.</p>
     </div>
 
+    <!--
+      TODO: trocar os href="#contato" dos três botões pelos links de checkout de cada plano.
+      TODO: só escrever "sem juros" no parcelamento depois que a HERO confirmar a cobrança
+      recorrente com fidelidade. Sem isso, a plataforma cobra juros do aluno.
+    -->
     <div class="plans">
       <div class="plan" data-reveal>
         <span class="plan__flag">Mensal</span>
         <h3>Pagamento mensal</h3>
         <p class="plan__sub">Para começar agora e decidir mês a mês.</p>
-        <p class="plan__price"><span class="cur">R$</span><span class="val">397</span><span class="per">por mês</span></p>
-        <p class="plan__total">Cobrança mensal recorrente.</p>
+        <p class="plan__price"><span class="cur">R$</span><span class="val">297</span><span class="per">por mês</span></p>
+        <p class="plan__total">Cobrança mensal. Sem fidelidade.</p>
         <ul class="plan__list">
           <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Acesso completo a tudo que está incluído</span></li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Um novo indicador tático por mês</span></li>
@@ -1127,20 +1203,41 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <p class="plan__foot">Sem fidelidade. Cancele quando quiser.</p>
       </div>
 
-      <div class="plan plan--featured" data-reveal>
-        <span class="plan__flag">Melhor custo-benefício</span>
-        <h3>Pagamento anual</h3>
-        <p class="plan__sub">Para quem vai levar a sério o ano inteiro.</p>
-        <p class="plan__price"><span class="pre">12x</span><span class="cur">R$</span><span class="val">197</span><span class="per">sem juros</span></p>
-        <p class="plan__total">Total de R$ 2.364 por ano.</p>
+      <div class="plan" data-reveal>
+        <span class="plan__flag">Semestral</span>
+        <h3>Pagamento semestral</h3>
+        <p class="plan__sub">Para fechar meio ano de estudo com desconto.</p>
+        <p class="plan__price"><span class="pre">6x</span><span class="cur">R$</span><span class="val">247</span><span class="per">por mês</span></p>
+        <p class="plan__total">Total de R$ 1.482 por semestre.</p>
+        <p class="plan__pix"><span class="plan__pix-label">Pix à vista</span>R$ 1.407,90 <span class="plan__pix-off">5% de desconto</span></p>
         <div class="plan__save">
           <svg aria-hidden="true"><use href="#i-savings"/></svg>
-          <span>Você economiza <b>R$ 2.400</b> em relação a 12 meses no plano mensal.</span>
+          <span>Você economiza <b>R$ 300</b> em relação a 6 meses no plano mensal.</span>
+        </div>
+        <ul class="plan__list">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Acesso completo a tudo que está incluído</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>6 indicadores táticos no semestre</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Fidelidade de 6 meses</span></li>
+        </ul>
+        <a class="btn btn--ghostLight btn--wide" href="#contato">Assinar no semestral</a>
+        <p class="plan__foot">Equivale a R$ 247 por mês.</p>
+      </div>
+
+      <div class="plan plan--featured" data-reveal>
+        <span class="plan__flag">Anual · melhor custo-benefício</span>
+        <h3>Pagamento anual</h3>
+        <p class="plan__sub">Para quem vai levar a sério o ano inteiro.</p>
+        <p class="plan__price"><span class="pre">12x</span><span class="cur">R$</span><span class="val">197</span><span class="per">por mês</span></p>
+        <p class="plan__total">Total de R$ 2.364 por ano.</p>
+        <p class="plan__pix"><span class="plan__pix-label">Pix à vista</span>R$ 2.127,60 <span class="plan__pix-off">10% de desconto</span></p>
+        <div class="plan__save">
+          <svg aria-hidden="true"><use href="#i-savings"/></svg>
+          <span>Você economiza <b>R$ 1.200</b> em relação a 12 meses no plano mensal.</span>
         </div>
         <ul class="plan__list">
           <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Acesso completo a tudo que está incluído</span></li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>12 indicadores táticos ao longo do ano</span></li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Parcelado em 12x sem juros</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Fidelidade de 12 meses</span></li>
         </ul>
         <a class="btn btn--navy btn--wide" href="#contato">Assinar no anual</a>
         <p class="plan__foot">Equivale a R$ 197 por mês.</p>
@@ -1149,7 +1246,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
 
     <p class="plans__note" data-reveal>
       Clube ou escolinha querendo levar a metodologia para o grupo inteiro?
-      <a href="#contato">Fale com a gente sobre turmas fechadas</a>.
+      <a href="#contato">Fale com a gente</a>.
     </p>
   </div>
 </section>
@@ -1181,24 +1278,38 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
       </details>
       <details>
         <summary>O que é um indicador de desempenho tático?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
-        <div class="faq__a"><p>É uma situação concreta do jogo que o atleta precisa entender e dominar. A cada mês trabalhamos um indicador diferente, do começo ao fim: apresentação ao vivo, dez vídeos curtos com exemplos reais, exercícios e um encontro final para tirar dúvidas.</p></div>
+        <div class="faq__a"><p>É uma situação concreta do jogo que o atleta precisa entender e dominar. A cada mês trabalhamos um indicador diferente, do começo ao fim: apresentação ao vivo, dez vídeos de 2 a 4 minutos com exemplos reais, dinâmicas e um encontro final para responder as dúvidas.</p></div>
       </details>
       <details>
         <summary>Como funcionam os encontros ao vivo?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
-        <div class="faq__a"><p>São dois por mês, online, por videochamada, em horário divulgado com antecedência na comunidade. No primeiro apresentamos o indicador do mês. No último respondemos as dúvidas coletadas e encerramos o conteúdo. Quem não puder participar assiste ao replay depois.</p></div>
+        <div class="faq__a"><p>São dois por mês, de 50 minutos, no Google Meet, em horário divulgado com antecedência. No primeiro apresentamos o indicador do mês. No último respondemos as dúvidas selecionadas no formulário e encerramos o conteúdo. Quem não puder participar assiste à gravação depois.</p></div>
       </details>
       <details>
         <summary>Preciso jogar em um clube para participar?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
         <div class="faq__a"><p>Não. Recebemos atletas de clubes, de escolinhas e também quem joga só com os amigos e quer entender o jogo de verdade. O que a gente pede é interesse em estudar.</p></div>
       </details>
       <details>
-        <summary>Qual é a diferença entre o pagamento mensal e o anual?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
-        <div class="faq__a"><p>Nenhuma no conteúdo: o plano é um só e inclui tudo. No mensal você paga R$ 397 por mês. No anual você paga 12 parcelas de R$ 197 sem juros, total de R$ 2.364, e economiza R$ 2.400 em relação a 12 meses no mensal.</p></div>
+        <summary>Qual é a diferença entre mensal, semestral e anual?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+        <div class="faq__a">
+          <p>Nenhuma no conteúdo: o plano é um só e inclui tudo. A diferença está na forma de pagar.</p>
+          <p>No mensal você paga R$ 297 por mês, sem fidelidade. No semestral, 6 parcelas de R$ 247 (R$ 1.482) ou R$ 1.407,90 à vista no Pix, com fidelidade de 6 meses. No anual, 12 parcelas de R$ 197 (R$ 2.364) ou R$ 2.127,60 à vista no Pix, com fidelidade de 12 meses, e você economiza R$ 1.200 em relação a 12 meses no mensal.</p>
+        </div>
       </details>
       <details>
         <summary>Posso cancelar quando quiser?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
-        <!-- TODO: confirmar com a Next Decision a regra de cancelamento do plano anual -->
-        <div class="faq__a"><p>No plano mensal, sim. Não há fidelidade nem multa de cancelamento.</p></div>
+        <div class="faq__a"><p>No mensal, sim: não há fidelidade nem multa. O semestral e o anual têm fidelidade de 6 e 12 meses. Em qualquer plano você tem 7 dias depois da compra para desistir e receber o valor de volta.</p></div>
+      </details>
+      <details>
+        <summary>Funciona mesmo online?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+        <div class="faq__a"><p>Sim. Análise tática é vídeo por natureza: congelar o lance, marcar as opções e discutir qual delas o jogo pedia. É assim que trabalhamos com profissionais na Scout Vision, e é assim que funciona na Next Decision.</p></div>
+      </details>
+      <details>
+        <summary>Meu filho vai assistir de verdade?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+        <div class="faq__a"><p>Os vídeos têm de 2 a 4 minutos, com linguagem leve e lances reais. Nas semanas 2 e 3, as dinâmicas de segunda, quarta e sexta trazem o atleta de volta ao conteúdo três vezes por semana. E você consegue ver o que ele estudou em cada semana.</p></div>
+      </details>
+      <details>
+        <summary>Vale o investimento?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+        <div class="faq__a"><p>No anual são 12 parcelas de R$ 197 por um ano inteiro de conteúdo, com um indicador novo por mês, dois encontros ao vivo e dez vídeos mensais. Se não for o que você esperava, tem 7 dias para desistir e receber o valor de volta.</p></div>
       </details>
       <details>
         <summary>Do que preciso para acompanhar as aulas?<svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
@@ -1236,7 +1347,8 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
     <div class="footer__grid">
       <div>
         <img src="img/logo-lockup-white.png" alt="Next Decision" width="560" height="214">
-        <p>Plataforma de desenvolvimento tático no futebol. Nossa missão é democratizar a inteligência tática, começando pela base.</p>
+        <p class="footer__sign">Inteligência de jogo desde a base.</p>
+        <p>Plataforma de desenvolvimento tático no futebol, com a metodologia da Scout Vision. Nossa missão é levar a inteligência tática para a base.</p>
         <div class="footer__social">
           <!-- TODO: substituir pelos perfis reais -->
           <a href="#" aria-label="Instagram da Next Decision"><svg aria-hidden="true"><use href="#i-instagram"/></svg></a>
@@ -1258,13 +1370,13 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
 
       <div>
         <h4>Onde queremos chegar</h4>
-        <p style="margin-bottom:1.25rem">Ser a maior plataforma de educação tática para atletas de base da América Latina.</p>
+        <p style="margin-bottom:1.25rem">Ser referência em educação tática de base no Brasil.</p>
         <h4>Contato</h4>
         <ul>
           <!-- TODO: substituir pelo e-mail e telefone reais -->
           <li><a href="#" data-contact>Falar no WhatsApp</a></li>
           <li><a href="#" data-contact>Enviar e-mail</a></li>
-          <li><a href="#plano">Turmas para clubes</a></li>
+          <li><a href="#contato">Clubes e escolinhas</a></li>
         </ul>
       </div>
     </div>
@@ -1300,7 +1412,8 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
   "areaServed":"BR",
   "audience":{"@type":"Audience","audienceType":"Atletas de futebol de base"},
   "makesOffer":[
-    {"@type":"Offer","name":"Next Decision · pagamento mensal","price":"397","priceCurrency":"BRL"},
+    {"@type":"Offer","name":"Next Decision · pagamento mensal","price":"297","priceCurrency":"BRL"},
+    {"@type":"Offer","name":"Next Decision · pagamento semestral (6x de R$ 247)","price":"1482","priceCurrency":"BRL"},
     {"@type":"Offer","name":"Next Decision · pagamento anual (12x de R$ 197)","price":"2364","priceCurrency":"BRL"}
   ]
 }
@@ -1378,6 +1491,48 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
     targets.forEach(function(el){ io.observe(el); });
     /* rede de segurança: nada fica invisível por falha de observer */
     setTimeout(showAll, 3000);
+  }
+
+  /* ---- carrossel de atletas ---- */
+  var track = document.getElementById('athletes-track');
+  if (track) {
+    var prevBtn = document.querySelector('[data-carousel-prev]');
+    var nextBtn = document.querySelector('[data-carousel-next]');
+    var paused = false, pauseTimer = null, inView = true;
+
+    function cardStep(){
+      var card = track.querySelector('.athlete');
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card ? card.getBoundingClientRect().width + gap : 300;
+    }
+    function go(dir){
+      var max = track.scrollWidth - track.clientWidth;
+      var x = track.scrollLeft + dir * cardStep();
+      if (dir > 0 && track.scrollLeft >= max - 4) x = 0;
+      if (dir < 0 && track.scrollLeft <= 4) x = max;
+      track.scrollTo({left: x, behavior: reduced ? 'auto' : 'smooth'});
+    }
+    function holdAuto(){
+      paused = true;
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(function(){ paused = false; }, 10000);
+    }
+    prevBtn.addEventListener('click', function(){ go(-1); holdAuto(); });
+    nextBtn.addEventListener('click', function(){ go(1); holdAuto(); });
+    ['pointerenter','focusin','touchstart','wheel'].forEach(function(ev){
+      track.addEventListener(ev, function(){ paused = true; }, {passive:true});
+    });
+    ['pointerleave','focusout','touchend'].forEach(function(ev){
+      track.addEventListener(ev, function(){ holdAuto(); }, {passive:true});
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){ inView = entries[0].isIntersecting; }, {threshold:0.3}).observe(track);
+    }
+    if (!reduced) {
+      setInterval(function(){
+        if (!paused && inView && document.visibilityState === 'visible') go(1);
+      }, 4500);
+    }
   }
 
   /* ---- contatos ainda não configurados ---- */

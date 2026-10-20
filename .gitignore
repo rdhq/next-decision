@@ -1,0 +1,12 @@
+# Fontes brutas que não vão para o site (ficam só no computador)
+/*.jpg
+/*.jpeg
+/*.png
+/*.pdf
+
+# Marcas de download do Windows
+*Zone.Identifier
+
+# Sistema
+.DS_Store
+Thumbs.db
