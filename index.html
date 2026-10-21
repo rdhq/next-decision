@@ -377,6 +377,40 @@ section[id],main{scroll-margin-top:92px}
 }
 .section--navy .figure figcaption{color:var(--on-navy-muted);border-left-color:var(--white)}
 
+/* carrossel de análises reais: as capturas trocam com transição suave */
+.fader{
+  position:relative;aspect-ratio:16/9;overflow:hidden;
+  border-radius:var(--r);border:1px solid var(--line-white);background:var(--navy);
+}
+.fader img{
+  position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;
+  border:0;border-radius:0;opacity:0;transition:opacity .9s var(--ease-io);
+}
+.fader img.is-on{opacity:1}
+.figure--fader figcaption{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem 1.25rem;
+}
+.figure--fader figcaption > span{flex:1 1 18rem}
+.fader__ctrl{display:flex;align-items:center;gap:.35rem;flex:none}
+.fader__btn{
+  width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--line-white-strong);
+  background:transparent;color:var(--navy);display:grid;place-items:center;cursor:pointer;
+  transition:border-color .2s,background-color .2s;
+}
+.fader__btn:hover{border-color:var(--navy);background:var(--panel-white)}
+.fader__btn svg{width:18px;height:18px}
+.fader__btn--prev svg{transform:rotate(180deg)}
+.fader__dots{display:flex;gap:.3rem;padding-inline:.35rem}
+.fader__dot{
+  position:relative;width:26px;height:44px;border:0;padding:0;background:transparent;cursor:pointer;
+}
+.fader__dot::before{
+  content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:2px;
+  background:var(--line-white-strong);transition:background-color .3s;
+}
+.fader__dot.is-on::before{background:var(--navy)}
+@media (prefers-reduced-motion:reduce){.fader img{transition:none}}
+
 .cycle{
   margin-top:clamp(2.5rem,5vw,3.5rem);
   display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem;
@@ -922,11 +956,32 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         </div>
       </dl>
 
-      <figure class="figure" data-reveal>
-        <img src="img/tactical-still.jpg" alt="Campo visto de cima com marcadores de jogadores, linhas de passe e trajetórias de movimentação sobrepostas" width="1000" height="854" loading="lazy">
+      <!--
+        Carrossel de capturas reais das análises da Scout Vision (img/analises/).
+        Para incluir mais uma, duplique um <img> dentro de .fader e um <button class="fader__dot">.
+      -->
+      <figure class="figure figure--fader" data-reveal>
+        <div class="fader" id="analises" aria-roledescription="carrossel" aria-label="Capturas das análises da Scout Vision">
+          <img class="is-on" src="img/analises/analise-01.jpg" alt="Análise de um lance da Premier League, com dois jogadores marcados e a nota: salta para o entrelinhas no primeiro momento, mudança de espaço em desvantagem" width="1116" height="629" loading="lazy">
+          <img src="img/analises/analise-02.jpg" alt="Análise de um lance da Ligue 1, com o espaço nas costas da pressão hachurado e a nota: comportamento passivo, demora para se posicionar e oferecer linha de passe" width="1118" height="628" loading="lazy">
+          <img src="img/analises/analise-03.jpg" alt="Análise de um lance da Champions League, com o cone de perfilamento do atacante e a nota: possibilidade de ajustar o perfilamento na trajetória da bola" width="1116" height="628" loading="lazy">
+          <img src="img/analises/analise-04.jpg" alt="Análise de um lance da Eredivisie, com atacante e defensor marcados e a nota: mantém movimento para o fundo, com possibilidade de mudar de direção para as costas do defensor" width="1118" height="631" loading="lazy">
+        </div>
         <figcaption>
-          O mesmo recurso que usamos na análise profissional: congelar o lance,
-          marcar as opções disponíveis e discutir qual delas o jogo pedia.
+          <span>
+            Capturas reais das análises da Scout Vision: congelar o lance, marcar o que importa
+            e dizer o que o jogo pedia. É assim que o conteúdo da Next Decision é feito.
+          </span>
+          <span class="fader__ctrl">
+            <button class="fader__btn fader__btn--prev" type="button" data-fader-prev aria-label="Análise anterior"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <span class="fader__dots">
+              <button class="fader__dot is-on" type="button" data-fader-dot aria-label="Análise 1 de 4" aria-current="true"></button>
+              <button class="fader__dot" type="button" data-fader-dot aria-label="Análise 2 de 4"></button>
+              <button class="fader__dot" type="button" data-fader-dot aria-label="Análise 3 de 4"></button>
+              <button class="fader__dot" type="button" data-fader-dot aria-label="Análise 4 de 4"></button>
+            </span>
+            <button class="fader__btn" type="button" data-fader-next aria-label="Próxima análise"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          </span>
         </figcaption>
       </figure>
     </div>
@@ -1491,6 +1546,41 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
     targets.forEach(function(el){ io.observe(el); });
     /* rede de segurança: nada fica invisível por falha de observer */
     setTimeout(showAll, 3000);
+  }
+
+  /* ---- carrossel de análises (crossfade) ---- */
+  var fader = document.getElementById('analises');
+  if (fader) {
+    var slides = Array.prototype.slice.call(fader.querySelectorAll('img'));
+    var dots = Array.prototype.slice.call(document.querySelectorAll('[data-fader-dot]'));
+    var idx = 0, faderHold = null, faderPaused = false, faderInView = true;
+
+    function showSlide(i){
+      idx = (i + slides.length) % slides.length;
+      slides.forEach(function(s, k){ s.classList.toggle('is-on', k === idx); });
+      dots.forEach(function(d, k){
+        d.classList.toggle('is-on', k === idx);
+        if (k === idx) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+      });
+    }
+    function holdFader(){
+      faderPaused = true;
+      clearTimeout(faderHold);
+      faderHold = setTimeout(function(){ faderPaused = false; }, 10000);
+    }
+    dots.forEach(function(d, k){ d.addEventListener('click', function(){ showSlide(k); holdFader(); }); });
+    document.querySelector('[data-fader-prev]').addEventListener('click', function(){ showSlide(idx - 1); holdFader(); });
+    document.querySelector('[data-fader-next]').addEventListener('click', function(){ showSlide(idx + 1); holdFader(); });
+    fader.addEventListener('pointerenter', function(){ faderPaused = true; });
+    fader.addEventListener('pointerleave', function(){ faderPaused = false; });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){ faderInView = entries[0].isIntersecting; }, {threshold:0.3}).observe(fader);
+    }
+    if (!reduced) {
+      setInterval(function(){
+        if (!faderPaused && faderInView && document.visibilityState === 'visible') showSlide(idx + 1);
+      }, 5000);
+    }
   }
 
   /* ---- carrossel de atletas ---- */
