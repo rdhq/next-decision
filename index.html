@@ -387,11 +387,8 @@ section[id],main{scroll-margin-top:92px}
   border:0;border-radius:0;opacity:0;transition:opacity .9s var(--ease-io);
 }
 .fader img.is-on{opacity:1}
-.figure--fader figcaption{
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem 1.25rem;
-}
-.figure--fader figcaption > span{flex:1 1 18rem}
-.fader__ctrl{display:flex;align-items:center;gap:.35rem;flex:none}
+.figure--fader figcaption{display:grid;gap:.75rem}
+.fader__ctrl{display:flex;align-items:center;justify-content:space-between;gap:.75rem;width:100%}
 .fader__btn{
   width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--line-white-strong);
   background:transparent;color:var(--navy);display:grid;place-items:center;cursor:pointer;
@@ -400,9 +397,9 @@ section[id],main{scroll-margin-top:92px}
 .fader__btn:hover{border-color:var(--navy);background:var(--panel-white)}
 .fader__btn svg{width:18px;height:18px}
 .fader__btn--prev svg{transform:rotate(180deg)}
-.fader__dots{display:flex;gap:.3rem;padding-inline:.35rem}
+.fader__dots{display:flex;justify-content:center;gap:.4rem;flex:1;min-width:0}
 .fader__dot{
-  position:relative;width:26px;height:44px;border:0;padding:0;background:transparent;cursor:pointer;
+  position:relative;flex:0 1 56px;min-width:20px;height:44px;border:0;padding:0;background:transparent;cursor:pointer;
 }
 .fader__dot::before{
   content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:2px;
@@ -410,6 +407,32 @@ section[id],main{scroll-margin-top:92px}
 }
 .fader__dot.is-on::before{background:var(--navy)}
 @media (prefers-reduced-motion:reduce){.fader img{transition:none}}
+.fader__open{
+  position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;margin:0;
+  background:transparent;cursor:zoom-in;color:#fff;z-index:1;border-radius:inherit;
+}
+.fader__open:focus-visible{outline-offset:-4px}
+.fader__open-badge{
+  position:absolute;right:.75rem;top:.75rem;
+  display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .7rem;border-radius:var(--r-pill);
+  background:rgba(12,35,64,.78);border:1px solid rgba(255,255,255,.35);
+  font-size:var(--fs-micro);font-weight:800;color:#fff;line-height:1;
+  transition:background-color .2s,border-color .2s;
+}
+.fader__open:hover .fader__open-badge{background:var(--navy);border-color:#fff}
+.fader__open-badge svg{width:14px;height:14px}
+dialog.modal--image{width:min(1320px,96vw)}
+dialog.modal--image img{width:100%;height:auto;display:block;background:#000}
+.modal__nav{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.85rem 1.25rem 1.1rem}
+.modal__nav p{font-size:var(--fs-xs);color:var(--on-navy-muted);max-width:none;flex:1}
+.modal__btn{
+  width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--line-navy-strong);
+  background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;
+  transition:border-color .2s,background-color .2s;
+}
+.modal__btn:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.modal__btn svg{width:18px;height:18px}
+.modal__btn--prev svg{transform:rotate(180deg)}
 
 .cycle{
   margin-top:clamp(2.5rem,5vw,3.5rem);
@@ -744,6 +767,7 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
   <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-savings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 4 4 7-7"/><path d="M15 8h5v5"/></symbol>
   <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-zoom" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5M11 8v6M8 11h6"/></symbol>
   <symbol id="i-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.56 3.75 1.53 5.28L2 22l5-1.63a9.8 9.8 0 005.04 1.39h.01c5.43 0 9.84-4.4 9.84-9.84C21.88 6.4 17.47 2 12.04 2zm5.72 13.9c-.24.68-1.4 1.3-1.94 1.34-.5.05-.98.23-3.3-.7-2.78-1.1-4.55-3.94-4.69-4.13-.13-.19-1.12-1.5-1.12-2.86 0-1.36.71-2.02.96-2.3.25-.28.55-.35.73-.35h.52c.17 0 .4-.06.62.48.24.57.8 1.98.87 2.12.07.14.12.3.02.49-.1.19-.15.3-.29.47-.14.16-.3.36-.43.48-.14.14-.29.3-.13.58.17.28.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.29 1.42.28.14.45.12.61-.07.17-.19.7-.82.89-1.1.19-.28.37-.23.62-.14.25.09 1.6.76 1.87.9.28.14.46.21.53.32.07.12.07.66-.17 1.34z"/></symbol>
 </svg>
 
@@ -966,6 +990,9 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
           <img src="img/analises/analise-02.jpg" alt="Análise de um lance da Ligue 1, com o espaço nas costas da pressão hachurado e a nota: comportamento passivo, demora para se posicionar e oferecer linha de passe" width="1118" height="628" loading="lazy">
           <img src="img/analises/analise-03.jpg" alt="Análise de um lance da Champions League, com o cone de perfilamento do atacante e a nota: possibilidade de ajustar o perfilamento na trajetória da bola" width="1116" height="628" loading="lazy">
           <img src="img/analises/analise-04.jpg" alt="Análise de um lance da Eredivisie, com atacante e defensor marcados e a nota: mantém movimento para o fundo, com possibilidade de mudar de direção para as costas do defensor" width="1118" height="631" loading="lazy">
+          <button class="fader__open" type="button" data-fader-open aria-label="Ampliar a análise">
+            <span class="fader__open-badge"><svg aria-hidden="true"><use href="#i-zoom"/></svg>Ampliar</span>
+          </button>
         </div>
         <figcaption>
           <span>
@@ -1457,6 +1484,22 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
   </video>
 </dialog>
 
+<!-- ============================ MODAL DE ANÁLISE AMPLIADA ============================ -->
+<dialog class="modal modal--image" id="analise-modal" aria-labelledby="analise-modal-title">
+  <div class="modal__bar">
+    <h2 id="analise-modal-title">Análise 1 de 4</h2>
+    <button class="modal__close" type="button" data-close-zoom aria-label="Fechar">
+      <svg aria-hidden="true"><use href="#i-close"/></svg>
+    </button>
+  </div>
+  <img id="analise-modal-img" src="img/analises/analise-01.jpg" alt="" width="1116" height="629">
+  <div class="modal__nav">
+    <button class="modal__btn modal__btn--prev" type="button" data-zoom-prev aria-label="Análise anterior"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <p>Use as setas do teclado para trocar de análise.</p>
+    <button class="modal__btn" type="button" data-zoom-next aria-label="Próxima análise"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  </div>
+</dialog>
+
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -1578,9 +1621,37 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
     }
     if (!reduced) {
       setInterval(function(){
-        if (!faderPaused && faderInView && document.visibilityState === 'visible') showSlide(idx + 1);
+        if (!faderPaused && !zoomOpen && faderInView && document.visibilityState === 'visible') showSlide(idx + 1);
       }, 5000);
     }
+
+    /* ampliar a análise em um modal */
+    var zoom = document.getElementById('analise-modal');
+    var zoomImg = document.getElementById('analise-modal-img');
+    var zoomTitle = document.getElementById('analise-modal-title');
+    var zoomOpen = false;
+    function syncZoom(){
+      var s = slides[idx];
+      zoomImg.src = s.getAttribute('src');
+      zoomImg.alt = s.alt;
+      zoomTitle.textContent = 'Análise ' + (idx + 1) + ' de ' + slides.length;
+    }
+    function openZoom(){
+      syncZoom();
+      zoomOpen = true;
+      if (zoom.showModal) { zoom.showModal(); } else { zoom.setAttribute('open', ''); }
+    }
+    function closeZoom(){ if (zoom.close) { zoom.close(); } else { zoom.removeAttribute('open'); zoomOpen = false; } }
+    document.querySelector('[data-fader-open]').addEventListener('click', openZoom);
+    zoom.querySelectorAll('[data-close-zoom]').forEach(function(b){ b.addEventListener('click', closeZoom); });
+    zoom.querySelector('[data-zoom-prev]').addEventListener('click', function(){ showSlide(idx - 1); syncZoom(); });
+    zoom.querySelector('[data-zoom-next]').addEventListener('click', function(){ showSlide(idx + 1); syncZoom(); });
+    zoom.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft') { showSlide(idx - 1); syncZoom(); }
+      if (e.key === 'ArrowRight') { showSlide(idx + 1); syncZoom(); }
+    });
+    zoom.addEventListener('click', function(e){ if (e.target === zoom) closeZoom(); });
+    zoom.addEventListener('close', function(){ zoomOpen = false; holdFader(); });
   }
 
   /* ---- carrossel de atletas ---- */
