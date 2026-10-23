@@ -509,14 +509,18 @@ dialog.modal--image img{width:100%;height:auto;display:block;background:#000}
 }
 .gains__list strong{display:block;color:#fff;font-weight:800;font-size:1.05rem;margin-bottom:.2rem;letter-spacing:-.015em}
 .gains__list span{font-size:var(--fs-sm);line-height:1.55;color:var(--on-navy-soft)}
-.gains__photo{position:relative;margin:0;max-width:400px;width:100%;justify-self:end}
+.gains__photos{
+  display:grid;grid-template-columns:1fr 1fr;gap:.9rem;align-items:start;
+  width:100%;max-width:500px;justify-self:end;
+}
+.gains__photos-note{grid-column:1 / -1;margin:0;font-size:var(--fs-xs);font-weight:600;color:var(--on-navy-muted);line-height:1.4}
+.gains__photo{position:relative;margin:0}
 .gains__photo img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center top;border-radius:var(--r-lg);border:1px solid var(--line-navy)}
 .gains__photo figcaption{
-  position:absolute;left:1rem;right:1rem;bottom:1rem;
-  padding:.85rem 1rem;border-radius:var(--r-sm);
-  background:var(--navy);color:#fff;font-size:var(--fs-xs);font-weight:700;line-height:1.4;
+  position:absolute;left:.75rem;right:.75rem;bottom:.75rem;
+  padding:.65rem .85rem;border-radius:var(--r-sm);
+  background:var(--navy);color:#fff;font-size:var(--fs-xs);font-weight:800;line-height:1.3;letter-spacing:-.01em;
 }
-.gains__photo figcaption span{display:block;font-weight:600;color:var(--on-navy-muted)}
 .parents{
   margin-top:clamp(3rem,6vw,4.5rem);
   display:grid;gap:1rem;
@@ -1117,10 +1121,17 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         </li>
       </ol>
 
-      <figure class="gains__photo" data-reveal>
-        <img src="img/atletas/kaua-elias.jpg" alt="Kauã Elias correndo durante uma partida" width="900" height="1200" loading="lazy">
-        <figcaption>Kauã Elias<span>Atleta acompanhado pela nossa equipe de análise individual</span></figcaption>
-      </figure>
+      <div class="gains__photos" data-reveal>
+        <figure class="gains__photo">
+          <img src="img/atletas/beraldo.jpg" alt="Beraldo fazendo um coração com as mãos ao comemorar" width="900" height="1200" loading="lazy">
+          <figcaption>Beraldo</figcaption>
+        </figure>
+        <figure class="gains__photo">
+          <img src="img/atletas/vitor-roque.jpg" alt="Vitor Roque correndo durante uma partida" width="957" height="1200" loading="lazy">
+          <figcaption>Vitor Roque</figcaption>
+        </figure>
+        <p class="gains__photos-note">Atletas acompanhados pela nossa equipe de análise individual.</p>
+      </div>
     </div>
 
     <div data-reveal>
@@ -1196,6 +1207,14 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <figure class="athlete">
           <img src="img/atletas/breno-bidon.jpg" alt="Breno Bidon em campo durante uma partida" width="959" height="1200" loading="lazy">
           <figcaption><span class="athlete__name">Breno Bidon</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/beraldo.jpg" alt="Beraldo comemorando um gol" width="900" height="1200" loading="lazy">
+          <figcaption><span class="athlete__name">Beraldo</span></figcaption>
+        </figure>
+        <figure class="athlete">
+          <img src="img/atletas/vitor-roque.jpg" alt="Vitor Roque correndo durante uma partida" width="957" height="1200" loading="lazy">
+          <figcaption><span class="athlete__name">Vitor Roque</span></figcaption>
         </figure>
       </div>
       <div class="carousel__nav">
