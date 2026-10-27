@@ -296,19 +296,6 @@ section[id],main{scroll-margin-top:92px}
 }
 .mark__line path{fill:none;stroke:currentColor;stroke-width:7;stroke-linecap:round}
 
-/* faixa de fatos ao pé do hero */
-.facts{
-  margin-top:clamp(3rem,6vw,4.5rem);
-  border-top:1px solid var(--line-navy);
-  padding-top:1.75rem;
-  display:grid;gap:1.25rem 2rem;
-  grid-template-columns:repeat(2,1fr);
-}
-@media (min-width:760px){.facts{grid-template-columns:repeat(4,1fr)}}
-.fact{display:grid;gap:.15rem}
-.fact__num{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;letter-spacing:-.03em;color:#fff;line-height:1}
-.fact__label{font-size:var(--fs-xs);font-weight:600;color:var(--on-navy-muted);line-height:1.4}
-
 /* ---------- proposta: medidores ---------- */
 .meters{display:grid;gap:1.6rem;margin-bottom:2.5rem;max-width:52rem}
 .meter__top{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.6rem}
@@ -736,7 +723,6 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
   .hero__lead{animation-delay:.18s}
   .hero__actions{animation-delay:.26s}
   .hero__proof{animation-delay:.34s}
-  .facts{animation:rise .9s var(--ease) .42s backwards}
   .mark__line path{
     stroke-dasharray:340;stroke-dashoffset:340;
     animation:draw 1s var(--ease) .75s forwards;
@@ -858,13 +844,6 @@ dialog.modal video{width:100%;aspect-ratio:16/9;background:#000;display:block}
         <svg aria-hidden="true"><use href="#i-shield"/></svg>
         <span>Metodologia da Scout Vision PRO, testada na elite. Quem prepara o conteúdo analisa atletas de alto rendimento todos os dias.</span>
       </p>
-    </div>
-
-    <div class="facts" aria-label="Resumo do que a assinatura inclui">
-      <div class="fact"><span class="fact__num">1</span><span class="fact__label">indicador tático por mês</span></div>
-      <div class="fact"><span class="fact__num">2</span><span class="fact__label">encontros ao vivo de 50 minutos por mês</span></div>
-      <div class="fact"><span class="fact__num">10</span><span class="fact__label">vídeos de 2 a 4 minutos por mês</span></div>
-      <div class="fact"><span class="fact__num">4</span><span class="fact__label">semanas para dominar cada indicador</span></div>
     </div>
   </div>
 </section>
