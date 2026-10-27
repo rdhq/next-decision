@@ -1,0 +1,15 @@
+# Material de trabalho que não faz parte do site
+assets/
+PRODUCT.md
+
+# Mídia que a página não usa
+mp4/hero_section.mp4
+img/atleta-0*.jpg
+img/IMG_5755.JPG.jpeg
+img/IMG_5789.JPG.jpeg
+img/stadium-still.jpg
+img/tactical-still.jpg
+img/logo-mark-white.png
+
+# Marcas de download do Windows
+*Zone.Identifier
